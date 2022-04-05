@@ -9,7 +9,9 @@ export class Reservoir {
   filling = true;
 
   constructor() {
+    // ph rule
     var rule1 = new Rule(measurements[0], solutions[1], 5);
+    // ec rule
     var rule2 = new Rule(measurements[1], solutions[0], 1000);
     var pump1 = new Pump(rule1);
     var pump2 = new Pump(rule2);
