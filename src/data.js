@@ -38,6 +38,11 @@ export class Rule {
     this.setpoint = setpoint;
     this.value = measurement.defaultValue;
   }
+
+  get variance() {
+    return 1/(this.setpoint / this.value);
+  }
+
 }
 
 export class Pump {
@@ -61,6 +66,7 @@ export class Farm {
 export class Plant {
   age = 0;
   size = 0;
+  yield = 0;
 }
 
 export const solutions = [

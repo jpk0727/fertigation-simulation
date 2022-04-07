@@ -8,7 +8,6 @@ import { Accordion, Badge, Button, Card, Col, Container, Form, FormControl, Row,
 import { useInterval } from "./hooks";
 
 export default function App() {
-    const [intervalId, setIntervalId] = useState();
     const [play, setPlay] = useState(false);
     const [game, setGame] = useState({
         day: 0,
@@ -49,9 +48,16 @@ export default function App() {
                     reservoir.volume -= plant.age * .1 / 24; // about 1 gallon a day at full growth
                 });
             });
+            var total_variance = reservoir.pumps.map(pump => pump.rule.variance).reduce((a, b) => a + b, 0) / reservoir.pumps.length;
+            newGame.farm.plants = newGame.farm.plants.map(p => ({
+                ...p,
+                size: p.size += hours * total_variance,
+                yield: (p.size += hours * total_variance) / (30*24)
+            }));
         });
         return newGame
     };
+
     const dose = (newGame, hours = 1) => {
         newGame.farm.reservoirs.forEach(reservoir => {
             reservoir.pumps.forEach(pump => {
@@ -159,7 +165,7 @@ export default function App() {
             </Row>
         </Container>
         </>
-    )
+    );
 }
 
 
@@ -225,7 +231,7 @@ function AddPump({ farm, updateFarm }) {
         </Card>
     )
 
-}
+};
 
 function FarmGraphic({ farm }) {
     return (
@@ -234,15 +240,15 @@ function FarmGraphic({ farm }) {
             <Row>
                 {farm.plants.map((plant, index) => {
                     return (
-                        <div key={index} className="pot d-flex justify-content-center align-items-center">
-                            <span className="plant" style={{ transform: `scale(${plant.age / 80 + 1})` }} />
+                        <div key={index} className="pot d-flex justify-content-center align-items-center ">
+                            <span className="plant" style={{ transform: `scale(${plant.yield*10})` }} />
                         </div>
                     )
                 })}
             </Row>
         </Card>
     )
-}
+};
 
 function ReservoirGraphic({ reservoir, update }) {
     return (
@@ -285,6 +291,7 @@ function ReservoirGraphic({ reservoir, update }) {
                                 <th>Solution</th>
                                 <th>Measurment</th>
                                 <th>Setpoint</th>
+                                <th>Variance</th>
                                 <th>Current Value</th>
                                 <th>Speed</th>
                             </tr>
@@ -295,6 +302,7 @@ function ReservoirGraphic({ reservoir, update }) {
                                     <td>{pump.rule.solution}</td>
                                     <td>{pump.rule.measurement}</td>
                                     <td>{pump.rule.setpoint}</td>
+                                    <td>{pump.rule.variance.toFixed(4)}</td>
                                     <td>{pump.rule.value.toFixed(4)}</td>
                                     <td>  
                                         <Form.Range min={0} max={200} value={pump.speed} onChange={(e) => update(reservoir.name, {
@@ -313,7 +321,7 @@ function ReservoirGraphic({ reservoir, update }) {
         </Card>
     )
 
-}
+};
 
 function Information() {
     return (
@@ -343,5 +351,5 @@ function Information() {
         </Card>
 
     )
-}
+};
 
