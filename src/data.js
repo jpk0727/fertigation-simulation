@@ -67,7 +67,7 @@ export class Plant {
   age = 0;
   size = 0;
   get yield() {
-    return (this.size / (30*24)).toFixed();
+    return (this.size / (30*24)).toFixed(2);
   }
 }
 

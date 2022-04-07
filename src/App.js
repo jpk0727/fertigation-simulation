@@ -47,7 +47,6 @@ export default function App() {
                     })
                     reservoir.volume -= plant.age * .1 / 24; // about 1 gallon a day at full growth
                 });
-                console.log(plant.yield);
             });
             // calculate the total variance for each of the rules
             var total_variance = reservoir.pumps.map(pump => pump.rule.variance).reduce((a, b) => a + b, 0) / reservoir.pumps.length;
@@ -242,8 +241,7 @@ function FarmGraphic({ farm }) {
                 {farm.plants.map((plant, index) => {
                     return (
                         <div key={index} className="pot d-flex justify-content-center align-items-center">
-                            <p>{plant.yield}</p>
-                            {/*<span className="plant" style={{ transform: `scale(${plant.yield*10})` }} />*/}
+                            <span className="plant" style={{ transform: `scale(${plant.yield*10})` }} />
                         </div>
                     )
                 })}
