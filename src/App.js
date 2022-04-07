@@ -47,13 +47,14 @@ export default function App() {
                     })
                     reservoir.volume -= plant.age * .1 / 24; // about 1 gallon a day at full growth
                 });
+                console.log(plant.yield);
             });
+            // calculate the total variance for each of the rules
             var total_variance = reservoir.pumps.map(pump => pump.rule.variance).reduce((a, b) => a + b, 0) / reservoir.pumps.length;
-            newGame.farm.plants = newGame.farm.plants.map(p => ({
-                ...p,
-                size: p.size += hours * total_variance,
-                yield: (p.size += hours * total_variance) / (30*24)
-            }));
+            // update each plants size after the resevoir has been dosed;
+            newGame.farm.plants.forEach(plant => {
+                plant.size += hours * total_variance;
+            })
         });
         return newGame
     };
@@ -240,8 +241,9 @@ function FarmGraphic({ farm }) {
             <Row>
                 {farm.plants.map((plant, index) => {
                     return (
-                        <div key={index} className="pot d-flex justify-content-center align-items-center ">
-                            <span className="plant" style={{ transform: `scale(${plant.yield*10})` }} />
+                        <div key={index} className="pot d-flex justify-content-center align-items-center">
+                            <p>{plant.yield}</p>
+                            {/*<span className="plant" style={{ transform: `scale(${plant.yield*10})` }} />*/}
                         </div>
                     )
                 })}

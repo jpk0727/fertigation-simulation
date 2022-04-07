@@ -66,7 +66,9 @@ export class Farm {
 export class Plant {
   age = 0;
   size = 0;
-  yield = 0;
+  get yield() {
+    return (this.size / (30*24)).toFixed();
+  }
 }
 
 export const solutions = [
